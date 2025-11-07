@@ -1,0 +1,25 @@
+﻿version: "3.9"
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    environment:
+      - CORS_ALLOW_ORIGINS=http://localhost:5173
+      - ENABLE_TELEMETRY_DEFAULT=0
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    environment:
+      - VITE_WS_URL=ws://localhost:8000/ws
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    restart: unless-stopped
